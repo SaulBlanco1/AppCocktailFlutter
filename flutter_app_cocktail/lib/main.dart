@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_cocktail/helpers/loading/loading_screen.dart';
+import 'package:flutter_app_cocktail/providers/counter_provider.dart';
 import 'package:flutter_app_cocktail/services/auth/bloc/auth_bloc.dart';
 import 'package:flutter_app_cocktail/services/auth/bloc/auth_event.dart';
 import 'package:flutter_app_cocktail/services/auth/bloc/auth_state.dart';
 import 'package:flutter_app_cocktail/services/auth/firebase_auth_provider.dart';
-import 'package:flutter_app_cocktail/views/cocktails/cocktail_view.dart';
+import 'package:flutter_app_cocktail/views/cocktails/cocktail_view_main.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_app_cocktail/views/forgot_password_view.dart';
 import 'package:flutter_app_cocktail/views/login_view.dart';
 
 import 'package:flutter_app_cocktail/views/register_view.dart';
 import 'package:flutter_app_cocktail/views/verify_email_view.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: BlocProvider<AuthBloc>(
-        create: (context) => AuthBloc(FirebaseAuthProvider()),
-        child: const HomePage(),
+    ChangeNotifierProvider(
+      create: (_) => CounterProvider(),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(FirebaseAuthProvider()),
+          child: const HomePage(),
+        ),
       ),
     ),
   );
@@ -45,7 +50,7 @@ class HomePage extends StatelessWidget {
       }
     }, builder: (context, state) {
       if (state is AuthStateLoggedIn) {
-        return const CocktailView();
+        return const MainCocktailView();
       } else if (state is AuthStateNeedsVerification) {
         return const VerifyEmailView();
       } else if (state is AuthStateLoggedOut) {
