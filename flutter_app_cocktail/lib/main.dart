@@ -14,11 +14,17 @@ import 'package:flutter_app_cocktail/views/register_view.dart';
 import 'package:flutter_app_cocktail/views/verify_email_view.dart';
 import 'package:provider/provider.dart';
 
+import 'providers/itemdetail_provider.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => CounterProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ItemDetail>(create: (_) => ItemDetail()),
+        ChangeNotifierProvider<CounterProvider>(
+            create: (_) => CounterProvider()),
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(

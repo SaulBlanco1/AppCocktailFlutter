@@ -19,6 +19,10 @@ class Drinks {
   String? strAlcoholic;
   String? strGlass;
   late String strDrinkThumb;
+  String? strInstructions;
+  String? strIngredient1;
+  String? strIngredient2;
+  String? strIngredient3;
 
   Drinks({
     required this.idDrink,
@@ -27,6 +31,10 @@ class Drinks {
     this.strAlcoholic,
     this.strGlass,
     required this.strDrinkThumb,
+    this.strInstructions,
+    this.strIngredient1,
+    this.strIngredient2,
+    this.strIngredient3,
   });
 
   Drinks.fromJson(Map<String, dynamic> json) {
@@ -36,5 +44,9 @@ class Drinks {
     strAlcoholic = json['strAlcoholic'];
     strGlass = json['strGlass'];
     strDrinkThumb = json['strDrinkThumb'];
+    strInstructions = json['strInstructions'];
+    strIngredient1 = json['strIngredient1'];
+    strIngredient2 = json['strIngredient2'];
+    strIngredient3 = json['strIngredient3'];
   }
 }

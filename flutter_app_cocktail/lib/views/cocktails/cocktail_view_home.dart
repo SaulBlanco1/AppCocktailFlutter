@@ -5,8 +5,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_cocktail/constants/constants.dart';
 import 'package:flutter_app_cocktail/dataclasses/cocktail_list_drinks.dart';
+import 'package:flutter_app_cocktail/providers/itemdetail_provider.dart';
 import 'package:flutter_app_cocktail/utilities/dialogs/error_dialog.dart';
+import 'package:flutter_app_cocktail/views/cocktails/cocktail_view_detail.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class HomeCocktailView extends StatefulWidget {
   const HomeCocktailView({super.key});
@@ -44,87 +47,103 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          controller: TextEditingController(),
-          onSubmitted: (value) {
-            searchForDrinks(value);
-          },
-          decoration: const InputDecoration(
-            hintText: 'Search for drinks...',
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            DropdownButton<String>(
-              value: _categorySelected,
-              items: categorias.map((String categoria) {
-                return DropdownMenuItem<String>(
-                  value: categoria,
-                  child: Text(categoria),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  _categorySelected = newValue!;
-                });
-              },
-            ),
-            DropdownButton<String>(
-              value: _alcoholicSelected,
-              items: alcoholic.map((String alcoholic) {
-                return DropdownMenuItem<String>(
-                  value: alcoholic,
-                  child: Text(alcoholic),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  _alcoholicSelected = newValue!;
-                });
-              },
-            ),
-          ],
-        ),
-        DropdownButton<String>(
-          value: _typeGlassSelected,
-          items: glassType.map((String glassType) {
-            return DropdownMenuItem<String>(
-              value: glassType,
-              child: Text(glassType),
-            );
-          }).toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              _typeGlassSelected = newValue!;
-            });
-          },
-        ),
-        Expanded(
-            child: ListView.builder(
-          itemCount: apiData.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Card(
-              child: ListTile(
-                leading: Image.network(
-                  apiData[index].strDrinkThumb,
-                  fit: BoxFit.cover,
-                  height: 150.0,
-                ),
-                title: Text(apiData[index].strDrink),
-                subtitle: Text(apiData[index].strCategory +
-                    ' / ' +
-                    apiData[index].strAlcoholic +
-                    ' / ' +
-                    apiData[index].strGlass),
-                onTap: () {},
+    return Container(
+      margin: const EdgeInsets.only(top: 35.0),
+      child: Column(
+        children: [
+          TextField(
+            controller: TextEditingController(),
+            onSubmitted: (value) {
+              searchForDrinks(value);
+            },
+            decoration: const InputDecoration(
+              errorBorder:
+                  OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+              hintText: 'Search for drinks...',
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue),
               ),
-            );
-          },
-        ))
-      ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              DropdownButton<String>(
+                value: _categorySelected,
+                items: categorias.map((String categoria) {
+                  return DropdownMenuItem<String>(
+                    value: categoria,
+                    child: Text(categoria),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _categorySelected = newValue!;
+                  });
+                },
+              ),
+              DropdownButton<String>(
+                value: _alcoholicSelected,
+                items: alcoholic.map((String alcoholic) {
+                  return DropdownMenuItem<String>(
+                    value: alcoholic,
+                    child: Text(alcoholic),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _alcoholicSelected = newValue!;
+                  });
+                },
+              ),
+            ],
+          ),
+          DropdownButton<String>(
+            value: _typeGlassSelected,
+            items: glassType.map((String glassType) {
+              return DropdownMenuItem<String>(
+                value: glassType,
+                child: Text(glassType),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                _typeGlassSelected = newValue!;
+              });
+            },
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: apiData.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                  child: ListTile(
+                    leading: Image.network(
+                      apiData[index].strDrinkThumb,
+                      fit: BoxFit.cover,
+                      height: 150.0,
+                    ),
+                    title: Text(apiData[index].strDrink),
+                    subtitle: Text(apiData[index].strCategory +
+                        ' / ' +
+                        apiData[index].strAlcoholic +
+                        ' / ' +
+                        apiData[index].strGlass),
+                    onTap: () {
+                      context.read<ItemDetail>().setitemDetail(apiData[index]);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ItemDetailShow()),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
