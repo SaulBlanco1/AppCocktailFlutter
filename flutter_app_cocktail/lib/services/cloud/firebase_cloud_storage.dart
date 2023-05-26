@@ -7,12 +7,14 @@ import 'package:flutter_app_cocktail/services/cloud/cloud_storage_exceptions.dar
 class FirebaseCloudStorage {
   final drinks = FirebaseFirestore.instance.collection('favDrinks');
 
-  Future<void> deleteDrinkFromFavs({required String documentId}) async {
-    try {
-      await drinks.doc(documentId).delete();
-    } catch (e) {
-      throw CouldNotDeleteNoteException();
-    }
+  Future<void> deleteDrinkFromFavs({required String drinkId}) async {
+    Query queryToDelete = drinks.where('idDrink', isEqualTo: drinkId);
+
+    queryToDelete.get().then((querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        doc.reference.delete();
+      }
+    });
   }
 
   Stream<Iterable<CloudDrink>> getAllFavs({required String ownerUserId}) {
@@ -21,6 +23,17 @@ class FirebaseCloudStorage {
         .snapshots()
         .map((event) => event.docs.map((doc) => CloudDrink.fromSnapshot(doc)));
     return allDrinks;
+  }
+
+  Future<List<String>> getAllIDsFavs({required String ownerUserId}) async {
+    List<String> idsFavs = [];
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await drinks.get();
+    List<CloudDrink> data =
+        querySnapshot.docs.map((doc) => CloudDrink.fromSnapshot(doc)).toList();
+    for (CloudDrink drink in data) {
+      idsFavs.add(drink.idDrink);
+    }
+    return idsFavs;
   }
 
   Future<void> addDrinktoFav(

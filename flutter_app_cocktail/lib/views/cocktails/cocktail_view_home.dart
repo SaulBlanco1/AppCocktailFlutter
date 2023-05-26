@@ -4,12 +4,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_cocktail/constants/constants.dart';
-import 'package:flutter_app_cocktail/dataclasses/cocktail_list_drinks.dart';
 import 'package:flutter_app_cocktail/providers/itemdetail_provider.dart';
 import 'package:flutter_app_cocktail/services/auth/auth_service.dart';
 import 'package:flutter_app_cocktail/services/cloud/cloud_note.dart';
 import 'package:flutter_app_cocktail/services/cloud/firebase_cloud_storage.dart';
 import 'package:flutter_app_cocktail/utilities/dialogs/error_dialog.dart';
+import 'package:flutter_app_cocktail/utilities/personalwidgets/icon_button_edited.dart';
 import 'package:flutter_app_cocktail/views/cocktails/cocktail_view_detail.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -22,9 +22,12 @@ class HomeCocktailView extends StatefulWidget {
 }
 
 class _HomeCocktailViewState extends State<HomeCocktailView> {
+  String userCurrent = AuthService.firebase().currentUser!.id;
   late final FirebaseCloudStorage _notesService;
   List<dynamic> apiData = [];
   bool isFavorite = false;
+  List<String> idFavorites = [];
+  bool _isChecked = false;
 
   String _categorySelected = 'Ordinary Drink';
   String _alcoholicSelected = 'Alcoholic';
@@ -45,10 +48,34 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
     }
   }
 
+  Future<List<String>> getidFavs() async {
+    List<String> listIdFavs =
+        await _notesService.getAllIDsFavs(ownerUserId: userCurrent);
+    idFavorites = listIdFavs;
+    return listIdFavs;
+  }
+
+  bool isFav(String drinkId) {
+    if (idFavorites.contains(drinkId)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Icon isFavIcon(String drinkId) {
+    if (idFavorites.contains(drinkId)) {
+      return const Icon(Icons.favorite);
+    } else {
+      return const Icon(Icons.favorite_border);
+    }
+  }
+
   @override
   void initState() {
     _notesService = FirebaseCloudStorage();
     searchForDrinks('a');
+    getidFavs();
     super.initState();
   }
 
@@ -136,27 +163,8 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
                         apiData[index].strAlcoholic +
                         ' / ' +
                         apiData[index].strGlass),
-                    trailing: Checkbox(
-                      value: isFavorite,
-                      onChanged: (value) async {
-                        if (value == true) {
-                          final currentUser =
-                              AuthService.firebase().currentUser!;
-                          await _notesService.addDrinktoFav(
-                              ownerUserId: currentUser.id,
-                              drinkToAdd: apiData[index]);
-                        } else {
-                          //TODO conseguir borrar drinks de firebase
-
-                          // await _notesService.deleteDrinkFromFavs(
-                          //     documentId: snapshot.id);
-                        }
-
-                        setState(() {
-                          isFavorite = value ?? false;
-                        });
-                      },
-                    ),
+                    trailing: IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.favorite)),
                     onTap: () {
                       context.read<ItemDetail>().setitemDetail(apiData[index]);
                       Navigator.push(

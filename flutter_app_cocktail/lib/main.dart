@@ -14,6 +14,7 @@ import 'package:flutter_app_cocktail/views/register_view.dart';
 import 'package:flutter_app_cocktail/views/verify_email_view.dart';
 import 'package:provider/provider.dart';
 
+import 'providers/favlist_provider.dart';
 import 'providers/itemdetail_provider.dart';
 
 void main() {
@@ -22,6 +23,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider<ItemDetail>(create: (_) => ItemDetail()),
+        ChangeNotifierProvider<FavListProv>(create: (_) => FavListProv()),
         ChangeNotifierProvider<CounterProvider>(
             create: (_) => CounterProvider()),
       ],

@@ -17,7 +17,7 @@ class ListOfCloudDrinks {
 
 class CloudDrink {
   late String documentId;
-  late String ownerUserid;
+  String? ownerUserid;
   late String idDrink;
   late String strDrink;
   String? strCategory;
@@ -31,7 +31,7 @@ class CloudDrink {
 
   CloudDrink({
     required this.documentId,
-    required this.ownerUserid,
+    this.ownerUserid,
     required this.idDrink,
     required this.strDrink,
     this.strCategory,
@@ -44,19 +44,21 @@ class CloudDrink {
     this.strIngredient3,
   });
 
-  CloudDrink.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : documentId = snapshot.id,
-        ownerUserid = snapshot.data()[ownerUserIdFieldName],
-        idDrink = snapshot.data()[drinkId],
-        strDrink = snapshot.data()[nameDrink],
-        strCategory = snapshot.data()[categoryDrink],
-        strAlcoholic = snapshot.data()[isAlcoholic],
-        strGlass = snapshot.data()[glassType],
-        strDrinkThumb = snapshot.data()[imageDrink],
-        strInstructions = snapshot.data()[instruc],
-        strIngredient1 = snapshot.data()[ingr1],
-        strIngredient2 = snapshot.data()[ingr2],
-        strIngredient3 = snapshot.data()[ingr3] as String;
+  CloudDrink.fromSnapshot(
+      QueryDocumentSnapshot<Map<String, dynamic>> snapshot) {
+    documentId = snapshot.id;
+    ownerUserid = snapshot.data()[ownerUserIdFieldName];
+    idDrink = snapshot.data()[drinkId];
+    strDrink = snapshot.data()[nameDrink];
+    strCategory = snapshot.data()[categoryDrink];
+    strAlcoholic = snapshot.data()[isAlcoholic];
+    strGlass = snapshot.data()[glassType];
+    strDrinkThumb = snapshot.data()[imageDrink];
+    strInstructions = snapshot.data()[instruc];
+    strIngredient1 = snapshot.data()[ingr1];
+    strIngredient2 = snapshot.data()[ingr2];
+    strIngredient3 = snapshot.data()[ingr3];
+  }
 
   CloudDrink.fromJson(Map<String, dynamic> json) {
     idDrink = json['idDrink'];

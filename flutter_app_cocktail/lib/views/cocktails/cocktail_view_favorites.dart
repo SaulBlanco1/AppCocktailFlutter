@@ -36,29 +36,24 @@ class _FavoritesViewState extends State<FavoritesView> {
             case ConnectionState.active:
               if (snapshot.hasData) {
                 final allFavDrinks = snapshot.data as Iterable<CloudDrink>;
-                final favsList = allFavDrinks.toList();
+                apiData = allFavDrinks.toList();
                 return ListView.builder(
-                  itemCount: favsList.length,
+                  itemCount: apiData.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Card(
                       child: ListTile(
                         leading: Image.network(
-                          favsList[index].strDrinkThumb,
+                          apiData[index].strDrinkThumb,
                           fit: BoxFit.cover,
                           height: 150.0,
                         ),
-                        title: Text(favsList[index].strDrink),
+                        title: Text(apiData[index].strDrink),
                         subtitle: Text(
-                            '${favsList[index].strCategory!} / ${favsList[index].strAlcoholic!} / ${favsList[index].strGlass!}'),
+                            '${apiData[index].strCategory!} / ${apiData[index].strAlcoholic!} / ${apiData[index].strGlass!}'),
                         trailing: Checkbox(
                           value: isFavorite,
                           onChanged: (value) async {
                             if (value == true) {
-                              final currentUser =
-                                  AuthService.firebase().currentUser!;
-                              await _notesService.addDrinktoFav(
-                                  ownerUserId: currentUser.id,
-                                  drinkToAdd: apiData[index]);
                             } else {
                               //TODO conseguir borrar drinks de firebase
 
@@ -74,7 +69,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                         onTap: () {
                           context
                               .read<ItemDetail>()
-                              .setitemDetail(favsList[index]);
+                              .setitemDetail(apiData[index]);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
