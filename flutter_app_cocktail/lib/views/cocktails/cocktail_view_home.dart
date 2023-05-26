@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_cocktail/constants/constants.dart';
 import 'package:flutter_app_cocktail/dataclasses/cocktail_list_drinks.dart';
 import 'package:flutter_app_cocktail/providers/itemdetail_provider.dart';
+import 'package:flutter_app_cocktail/services/auth/auth_service.dart';
+import 'package:flutter_app_cocktail/services/cloud/cloud_note.dart';
+import 'package:flutter_app_cocktail/services/cloud/firebase_cloud_storage.dart';
 import 'package:flutter_app_cocktail/utilities/dialogs/error_dialog.dart';
 import 'package:flutter_app_cocktail/views/cocktails/cocktail_view_detail.dart';
 import 'package:http/http.dart' as http;
@@ -19,7 +22,10 @@ class HomeCocktailView extends StatefulWidget {
 }
 
 class _HomeCocktailViewState extends State<HomeCocktailView> {
+  late final FirebaseCloudStorage _notesService;
   List<dynamic> apiData = [];
+  bool isFavorite = false;
+
   String _categorySelected = 'Ordinary Drink';
   String _alcoholicSelected = 'Alcoholic';
   String _typeGlassSelected = 'Highball glass';
@@ -29,7 +35,7 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
         'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=$drinktoSearch'));
 
     final Map<String, dynamic> parsedJson = json.decode(response.body);
-    final drinklist = ListOfDrinks.fromJson(parsedJson);
+    final drinklist = ListOfCloudDrinks.fromJson(parsedJson);
 
     setState(() {
       apiData = drinklist.drinks;
@@ -41,6 +47,7 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
 
   @override
   void initState() {
+    _notesService = FirebaseCloudStorage();
     searchForDrinks('a');
     super.initState();
   }
@@ -129,6 +136,27 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
                         apiData[index].strAlcoholic +
                         ' / ' +
                         apiData[index].strGlass),
+                    trailing: Checkbox(
+                      value: isFavorite,
+                      onChanged: (value) async {
+                        if (value == true) {
+                          final currentUser =
+                              AuthService.firebase().currentUser!;
+                          await _notesService.addDrinktoFav(
+                              ownerUserId: currentUser.id,
+                              drinkToAdd: apiData[index]);
+                        } else {
+                          //TODO conseguir borrar drinks de firebase
+
+                          // await _notesService.deleteDrinkFromFavs(
+                          //     documentId: snapshot.id);
+                        }
+
+                        setState(() {
+                          isFavorite = value ?? false;
+                        });
+                      },
+                    ),
                     onTap: () {
                       context.read<ItemDetail>().setitemDetail(apiData[index]);
                       Navigator.push(

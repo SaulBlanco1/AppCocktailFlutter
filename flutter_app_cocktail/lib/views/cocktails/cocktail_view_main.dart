@@ -3,14 +3,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app_cocktail/dataclasses/cocktail_list_drinks.dart';
-import 'package:flutter_app_cocktail/enums/menu_action.dart';
 import 'package:flutter_app_cocktail/providers/itemdetail_provider.dart';
 import 'package:flutter_app_cocktail/services/auth/auth_service.dart';
-import 'package:flutter_app_cocktail/services/auth/bloc/auth_bloc.dart';
-import 'package:flutter_app_cocktail/services/auth/bloc/auth_event.dart';
+import 'package:flutter_app_cocktail/services/cloud/cloud_note.dart';
 import 'package:flutter_app_cocktail/utilities/dialogs/error_dialog.dart';
-import 'package:flutter_app_cocktail/utilities/dialogs/logout_dialog.dart';
 import 'package:flutter_app_cocktail/views/cocktails/cocktail_view_detail.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_app_cocktail/views/cocktails/cocktail_view_favorites.dart';
@@ -28,7 +24,7 @@ class MainCocktailView extends StatefulWidget {
 class _MainCocktailViewState extends State<MainCocktailView> {
   String get userId => AuthService.firebase().currentUser!.id;
   int _selectedIndex = 0;
-  Drinks? apiData;
+  CloudDrink? apiData;
 
   final List<Widget> _pages = <Widget>[
     const HomeCocktailView(),
@@ -51,7 +47,7 @@ class _MainCocktailViewState extends State<MainCocktailView> {
         Uri.parse('https://www.thecocktaildb.com/api/json/v1/1/random.php'));
 
     final Map<String, dynamic> parsedJson = json.decode(response.body);
-    final drinklist = ListOfDrinks.fromJson(parsedJson);
+    final drinklist = ListOfCloudDrinks.fromJson(parsedJson);
 
     setState(() {
       apiData = drinklist.drinks[0];

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_cocktail/services/cloud/cloud_note.dart';
 
 import '../dataclasses/cocktail_list_drinks.dart';
 
 class ItemDetail with ChangeNotifier {
-  late Drinks _drinktoDetail;
+  late CloudDrink _drinktoDetail;
 
-  Drinks get getDrink => _drinktoDetail;
+  CloudDrink get getDrink => _drinktoDetail;
 
-  void setitemDetail(Drinks drinktoShow) {
+  void setitemDetail(CloudDrink drinktoShow) {
     _drinktoDetail = drinktoShow;
     notifyListeners();
   }
