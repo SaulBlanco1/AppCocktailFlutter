@@ -50,20 +50,12 @@ class _FavoritesViewState extends State<FavoritesView> {
                         title: Text(apiData[index].strDrink),
                         subtitle: Text(
                             '${apiData[index].strCategory!} / ${apiData[index].strAlcoholic!} / ${apiData[index].strGlass!}'),
-                        trailing: Checkbox(
-                          value: isFavorite,
-                          onChanged: (value) async {
-                            if (value == true) {
-                            } else {
-                              //TODO conseguir borrar drinks de firebase
-
-                              // await _notesService.deleteDrinkFromFavs(
-                              //     documentId: snapshot.id);
-                            }
-
-                            setState(() {
-                              isFavorite = value ?? false;
-                            });
+                        trailing: IconButton(
+                          icon: const Icon(Icons.favorite),
+                          color: Colors.red,
+                          onPressed: () async {
+                            await _notesService.deleteDrinkFromFavs(
+                                drinkId: apiData[index].idDrink);
                           },
                         ),
                         onTap: () {

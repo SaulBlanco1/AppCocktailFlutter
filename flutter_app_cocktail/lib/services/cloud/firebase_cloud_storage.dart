@@ -30,7 +30,11 @@ class FirebaseCloudStorage {
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await drinks.get();
     List<CloudDrink> data =
         querySnapshot.docs.map((doc) => CloudDrink.fromSnapshot(doc)).toList();
-    for (CloudDrink drink in data) {
+
+    List<CloudDrink> filteredData =
+        data.where((drink) => drink.ownerUserid == ownerUserId).toList();
+
+    for (CloudDrink drink in filteredData) {
       idsFavs.add(drink.idDrink);
     }
     return idsFavs;
