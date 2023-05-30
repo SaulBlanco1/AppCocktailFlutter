@@ -37,40 +37,51 @@ class _FavoritesViewState extends State<FavoritesView> {
               if (snapshot.hasData) {
                 final allFavDrinks = snapshot.data as Iterable<CloudDrink>;
                 apiData = allFavDrinks.toList();
-                return ListView.builder(
-                  itemCount: apiData.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      child: ListTile(
-                        leading: Image.network(
-                          apiData[index].strDrinkThumb,
-                          fit: BoxFit.cover,
-                          height: 150.0,
-                        ),
-                        title: Text(apiData[index].strDrink),
-                        subtitle: Text(
-                            '${apiData[index].strCategory!} / ${apiData[index].strAlcoholic!} / ${apiData[index].strGlass!}'),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.favorite),
-                          color: Colors.red,
-                          onPressed: () async {
-                            await _notesService.deleteDrinkFromFavs(
-                                drinkId: apiData[index].idDrink);
+                return Container(
+                  decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 236, 196, 78)),
+                  child: ListView.builder(
+                    itemCount: apiData.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        color: Colors.white,
+                        elevation: 5.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            side:
+                                const BorderSide(color: Colors.grey, width: 1)),
+                        margin: const EdgeInsets.all(4.0),
+                        child: ListTile(
+                          leading: Image.network(
+                            apiData[index].strDrinkThumb,
+                            fit: BoxFit.cover,
+                            height: 150.0,
+                          ),
+                          title: Text(apiData[index].strDrink),
+                          subtitle: Text(
+                              '${apiData[index].strCategory!} / ${apiData[index].strAlcoholic!} / ${apiData[index].strGlass!}'),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.favorite),
+                            color: Colors.red,
+                            onPressed: () async {
+                              await _notesService.deleteDrinkFromFavs(
+                                  drinkId: apiData[index].idDrink);
+                            },
+                          ),
+                          onTap: () {
+                            context
+                                .read<ItemDetail>()
+                                .setitemDetail(apiData[index]);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ItemDetailShow()),
+                            );
                           },
                         ),
-                        onTap: () {
-                          context
-                              .read<ItemDetail>()
-                              .setitemDetail(apiData[index]);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ItemDetailShow()),
-                          );
-                        },
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 );
               } else {
                 return const CircularProgressIndicator();
