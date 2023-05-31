@@ -9,7 +9,6 @@ import 'package:flutter_app_cocktail/services/auth/auth_service.dart';
 import 'package:flutter_app_cocktail/services/cloud/cloud_note.dart';
 import 'package:flutter_app_cocktail/services/cloud/firebase_cloud_storage.dart';
 import 'package:flutter_app_cocktail/utilities/dialogs/error_dialog.dart';
-import 'package:flutter_app_cocktail/utilities/dialogs/infofavs_dialog.dart';
 import 'package:flutter_app_cocktail/views/cocktails/cocktail_view_detail.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -37,6 +36,7 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
 
   Future<void> searchForDrinks(String drinktoSearch) async {
     final List<CloudDrink> finalListtoShow;
+
     final response = await http.get(Uri.parse(
         'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=$drinktoSearch'));
 

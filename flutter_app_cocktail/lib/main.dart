@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_cocktail/helpers/loading/loading_screen.dart';
 import 'package:flutter_app_cocktail/providers/counter_provider.dart';
+import 'package:flutter_app_cocktail/providers/ingredient_provider.dart';
 import 'package:flutter_app_cocktail/services/auth/bloc/auth_bloc.dart';
 import 'package:flutter_app_cocktail/services/auth/bloc/auth_event.dart';
 import 'package:flutter_app_cocktail/services/auth/bloc/auth_state.dart';
@@ -26,6 +27,8 @@ void main() {
         ChangeNotifierProvider<FavListProv>(create: (_) => FavListProv()),
         ChangeNotifierProvider<CounterProvider>(
             create: (_) => CounterProvider()),
+        ChangeNotifierProvider<IngredientDetail>(
+            create: (_) => IngredientDetail()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

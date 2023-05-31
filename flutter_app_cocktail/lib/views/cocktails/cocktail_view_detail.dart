@@ -1,10 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_cocktail/providers/ingredient_provider.dart';
 import 'package:flutter_app_cocktail/providers/itemdetail_provider.dart';
 import 'package:flutter_app_cocktail/services/auth/auth_service.dart';
 import 'package:flutter_app_cocktail/services/cloud/firebase_cloud_storage.dart';
 import 'package:flutter_app_cocktail/utilities/dialogs/infofavs_dialog.dart';
+import 'package:flutter_app_cocktail/views/cocktails/cocktail_view_ingredetail.dart';
 import 'package:provider/provider.dart';
 
 class ItemDetailShow extends StatefulWidget {
@@ -212,52 +214,110 @@ class _ItemDetailShowState extends State<ItemDetailShow> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Flexible(
-                                  child: Text(
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                    context
-                                            .watch<ItemDetail>()
-                                            .getDrink
-                                            .strIngredient1 ??
-                                        'Error',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
+                                SizedBox(
+                                  width: 100.0,
+                                  height: 60.0,
+                                  child: IconButton(
+                                    icon: Text(
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      context
+                                              .watch<ItemDetail>()
+                                              .getDrink
+                                              .strIngredient1 ??
+                                          '',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.pink,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
+                                    onPressed: () {
+                                      Provider.of<IngredientDetail>(context,
+                                              listen: false)
+                                          .setingreDetail(
+                                              Provider.of<ItemDetail>(context,
+                                                          listen: false)
+                                                      .getDrink
+                                                      .strIngredient1 ??
+                                                  '');
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const IngredientView()));
+                                    },
                                   ),
                                 ),
-                                Flexible(
-                                  child: Text(
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                    context
-                                            .watch<ItemDetail>()
-                                            .getDrink
-                                            .strIngredient2 ??
-                                        'Error',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.purple,
-                                      fontWeight: FontWeight.bold,
+                                SizedBox(
+                                  width: 100.0,
+                                  height: 60.0,
+                                  child: IconButton(
+                                    icon: Text(
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      context
+                                              .watch<ItemDetail>()
+                                              .getDrink
+                                              .strIngredient2 ??
+                                          '',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.pink,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
+                                    onPressed: () {
+                                      Provider.of<IngredientDetail>(context,
+                                              listen: false)
+                                          .setingreDetail(
+                                              Provider.of<ItemDetail>(context,
+                                                          listen: false)
+                                                      .getDrink
+                                                      .strIngredient2 ??
+                                                  '');
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const IngredientView()));
+                                    },
                                   ),
                                 ),
-                                Flexible(
-                                  child: Text(
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                    context
-                                            .watch<ItemDetail>()
-                                            .getDrink
-                                            .strIngredient3 ??
-                                        'Error',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.pink,
-                                      fontWeight: FontWeight.bold,
+                                SizedBox(
+                                  width: 100.0,
+                                  height: 60.0,
+                                  child: IconButton(
+                                    icon: Text(
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      context
+                                              .watch<ItemDetail>()
+                                              .getDrink
+                                              .strIngredient3 ??
+                                          '',
+                                      style: const TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        fontSize: 20,
+                                        color: Colors.pink,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
+                                    onPressed: () {
+                                      Provider.of<IngredientDetail>(context,
+                                              listen: false)
+                                          .setingreDetail(
+                                              Provider.of<ItemDetail>(context,
+                                                          listen: false)
+                                                      .getDrink
+                                                      .strIngredient3 ??
+                                                  '');
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const IngredientView()));
+                                    },
                                   ),
                                 ),
                               ],

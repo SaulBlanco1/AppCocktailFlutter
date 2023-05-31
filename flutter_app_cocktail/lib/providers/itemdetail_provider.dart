@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_cocktail/services/cloud/cloud_note.dart';
 
-import '../dataclasses/cocktail_list_drinks.dart';
-
 class ItemDetail with ChangeNotifier {
   late CloudDrink _drinktoDetail;
 

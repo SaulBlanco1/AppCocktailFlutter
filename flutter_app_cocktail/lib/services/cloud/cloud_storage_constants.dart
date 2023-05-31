@@ -10,3 +10,10 @@ const ingr1 = 'strIngredient1';
 const ingr2 = 'strIngredient2';
 const ingr3 = 'strIngredient3';
 const instruc = 'strInstructions';
+
+const idOfIngredient = 'idIngredient';
+const nameIngredient = 'strIngredient';
+const descriptionIngr = 'strDescription';
+const typeIngr = 'strType';
+const isAlcohol = 'strAlcohol';
+const gradesAlc = 'strABV';
