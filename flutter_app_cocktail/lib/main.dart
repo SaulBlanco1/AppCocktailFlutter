@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_cocktail/constants/constants.dart';
 import 'package:flutter_app_cocktail/helpers/loading/loading_screen.dart';
 import 'package:flutter_app_cocktail/providers/counter_provider.dart';
 import 'package:flutter_app_cocktail/providers/ingredient_provider.dart';
@@ -31,15 +32,20 @@ void main() {
             create: (_) => IngredientDetail()),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc(FirebaseAuthProvider()),
-          child: const HomePage(),
-        ),
-      ),
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: BlocProvider<AuthBloc>(
+            create: (context) => AuthBloc(FirebaseAuthProvider()),
+            child: const HomePage(),
+          ),
+          routes: {
+            mainScreen: (context) => BlocProvider<AuthBloc>(
+                  create: (context) => AuthBloc(FirebaseAuthProvider()),
+                  child: const HomePage(),
+                ),
+          }),
     ),
   );
 }

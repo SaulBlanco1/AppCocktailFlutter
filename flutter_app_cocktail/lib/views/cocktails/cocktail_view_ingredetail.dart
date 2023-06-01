@@ -35,7 +35,6 @@ class _IngredientViewState extends State<IngredientView> {
 
     idFavorites =
         await _notesService.getAllIngredientsIDsFavs(ownerUserId: userCurrent);
-    print('aqui' + idFavorites.toString());
     return infoIngre.ingredients[0];
   }
 
@@ -107,8 +106,9 @@ class _IngredientViewState extends State<IngredientView> {
                         onPressed: () async {
                           if (idFavorites
                               .contains(snapshot.data?.idIngredient)) {
-                            await _notesService.deleteDrinkFromFavs(
-                                drinkId: snapshot.data?.idIngredient ?? '');
+                            await _notesService.deleteDrinkFromIngredientsFavs(
+                                idIngredient:
+                                    snapshot.data?.idIngredient ?? '');
 
                             await showInfoFavsDialog(
                                 context, 'Ingredient eliminated from Favs.');
@@ -118,7 +118,7 @@ class _IngredientViewState extends State<IngredientView> {
                                 ingredientToAdd: snapshot.data!);
 
                             await showInfoFavsDialog(
-                                context, 'Drink added to Favs.');
+                                context, 'Ingredient added to Favs.');
                           }
                           await getidFavs();
                           setState(() {

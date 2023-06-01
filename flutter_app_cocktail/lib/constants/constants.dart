@@ -54,3 +54,5 @@ const List<String> glassType = [
   'Balloon Glass',
   'Coupe Glass'
 ];
+
+const mainScreen = 'mainScreen';
