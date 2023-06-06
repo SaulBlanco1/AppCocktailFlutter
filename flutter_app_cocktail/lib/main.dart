@@ -32,10 +32,10 @@ void main() {
             create: (_) => IngredientDetail()),
       ],
       child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          themeMode: ThemeMode.light,
           title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
+          theme: ThemeData.light(),
           home: BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(FirebaseAuthProvider()),
             child: const HomePage(),

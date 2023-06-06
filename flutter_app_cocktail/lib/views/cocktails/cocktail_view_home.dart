@@ -175,91 +175,106 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
                           padding: const EdgeInsets.symmetric(vertical: 15.0),
                           child: Column(
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Checkbox(
-                                    value: _categoryActivated,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _categoryActivated =
-                                            !_categoryActivated;
-                                      });
-                                    },
-                                  ),
-                                  DropdownButton<String>(
-                                    value: _categorySelected,
-                                    items: _filtersActivated
-                                        ? categorias.map((String categoria) {
-                                            return DropdownMenuItem<String>(
-                                              value: categoria,
-                                              child: Text(categoria),
-                                            );
-                                          }).toList()
-                                        : [],
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        _categorySelected = newValue!;
-                                      });
-                                    },
-                                  ),
-                                  Checkbox(
-                                    value: _alcoholicActivated,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _alcoholicActivated =
-                                            !_alcoholicActivated;
-                                      });
-                                    },
-                                  ),
-                                  DropdownButton<String>(
-                                    value: _alcoholicSelected,
-                                    items: _filtersActivated
-                                        ? alcoholic.map((String alcoholic) {
-                                            return DropdownMenuItem<String>(
-                                              value: alcoholic,
-                                              child: Text(alcoholic),
-                                            );
-                                          }).toList()
-                                        : [],
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        _alcoholicSelected = newValue!;
-                                      });
-                                    },
-                                  ),
-                                ],
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30.0),
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: _categoryActivated,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _categoryActivated =
+                                              !_categoryActivated;
+                                        });
+                                      },
+                                    ),
+                                    DropdownButton<String>(
+                                      value: _categorySelected,
+                                      items: _filtersActivated
+                                          ? categorias.map((String categoria) {
+                                              return DropdownMenuItem<String>(
+                                                value: categoria,
+                                                child: Text(categoria,
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
+                                              );
+                                            }).toList()
+                                          : [],
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          _categorySelected = newValue!;
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Checkbox(
-                                    value: _typeGlassActivated,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _typeGlassActivated =
-                                            !_typeGlassActivated;
-                                      });
-                                    },
-                                  ),
-                                  DropdownButton<String>(
-                                    value: _typeGlassSelected,
-                                    items: _filtersActivated
-                                        ? glassType.map((String glassType) {
-                                            return DropdownMenuItem<String>(
-                                              value: glassType,
-                                              child: Text(glassType),
-                                            );
-                                          }).toList()
-                                        : [],
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        _typeGlassSelected = newValue!;
-                                      });
-                                    },
-                                  ),
-                                ],
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30.0),
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: _alcoholicActivated,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _alcoholicActivated =
+                                              !_alcoholicActivated;
+                                        });
+                                      },
+                                    ),
+                                    DropdownButton<String>(
+                                      value: _alcoholicSelected,
+                                      items: _filtersActivated
+                                          ? alcoholic.map((String alcoholic) {
+                                              return DropdownMenuItem<String>(
+                                                value: alcoholic,
+                                                child: Text(alcoholic),
+                                              );
+                                            }).toList()
+                                          : [],
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          _alcoholicSelected = newValue!;
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30.0),
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: _typeGlassActivated,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _typeGlassActivated =
+                                              !_typeGlassActivated;
+                                        });
+                                      },
+                                    ),
+                                    DropdownButton<String>(
+                                      value: _typeGlassSelected,
+                                      items: _filtersActivated
+                                          ? glassType.map((String glassType) {
+                                              return DropdownMenuItem<String>(
+                                                value: glassType,
+                                                child: Text(glassType),
+                                              );
+                                            }).toList()
+                                          : [],
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          _typeGlassSelected = newValue!;
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
