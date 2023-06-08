@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, prefer_interpolation_to_compose_strings
 
 import 'dart:convert';
 
@@ -23,7 +23,7 @@ class HomeCocktailView extends StatefulWidget {
 class _HomeCocktailViewState extends State<HomeCocktailView> {
   String userCurrent = AuthService.firebase().currentUser!.id;
   late final FirebaseCloudStorage _notesService;
-  List<dynamic> apiData = [];
+  String searchtoSearch = 'a';
   List<String> idFavorites = [];
   bool _filtersActivated = false;
   bool _categoryActivated = false;
@@ -34,50 +34,49 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
   String _alcoholicSelected = 'Alcoholic';
   String _typeGlassSelected = 'Highball glass';
 
-  Future<void> searchForDrinks(String drinktoSearch) async {
-    final List<CloudDrink> finalListtoShow;
+  Future<List<CloudDrink>> searchForDrinks(String drinktoSearch) async {
+    List<CloudDrink> finalListtoShow;
 
     final response = await http.get(Uri.parse(
         'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=$drinktoSearch'));
 
     final Map<String, dynamic> parsedJson = json.decode(response.body);
     final drinklist = ListOfCloudDrinks.fromJson(parsedJson);
-
+    await getidFavs();
     if (_filtersActivated) {
       finalListtoShow = filterSearch(drinklist.drinks);
-      if (finalListtoShow.isEmpty) {
-        await showErrorDialog(context, 'No Drinks Found.');
-      }
     } else {
       finalListtoShow = drinklist.drinks;
+      return finalListtoShow;
     }
-    setState(() {
-      apiData = finalListtoShow;
-    });
-    if (drinklist.drinks.isEmpty) {
+
+    if (finalListtoShow.isEmpty) {
       await showErrorDialog(context, 'No results found for your search.');
     }
+    return finalListtoShow;
   }
 
   List<CloudDrink> filterSearch(List<CloudDrink> listtoFilter) {
     List<CloudDrink> finalList = listtoFilter;
 
-    if (_categoryActivated) {
-      finalList = finalList
-          .where((drink) => drink.strCategory == _categorySelected)
-          .toList();
-    }
+    if (finalList.isNotEmpty) {
+      if (_categoryActivated) {
+        finalList = finalList
+            .where((drink) => drink.strCategory == _categorySelected)
+            .toList();
+      }
 
-    if (_alcoholicActivated) {
-      finalList = finalList
-          .where((drink) => drink.strAlcoholic == _alcoholicSelected)
-          .toList();
-    }
+      if (_alcoholicActivated) {
+        finalList = finalList
+            .where((drink) => drink.strAlcoholic == _alcoholicSelected)
+            .toList();
+      }
 
-    if (_typeGlassActivated) {
-      finalList = finalList
-          .where((drink) => drink.strGlass == _typeGlassSelected)
-          .toList();
+      if (_typeGlassActivated) {
+        finalList = finalList
+            .where((drink) => drink.strGlass == _typeGlassSelected)
+            .toList();
+      }
     }
 
     return finalList;
@@ -90,35 +89,21 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
     return listIdFavs;
   }
 
-  Future<bool> isFav(String drinkId) async {
-    List<String> listIdFavs =
-        await _notesService.getAllIDsFavs(ownerUserId: userCurrent);
-    idFavorites = listIdFavs;
-    if (idFavorites.contains(drinkId)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   @override
   void initState() {
     _notesService = FirebaseCloudStorage();
-    //searchForDrinks('a');
-    //getidFavs();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: searchForDrinks('a'),
+      future: searchForDrinks(searchtoSearch),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
           case ConnectionState.active:
           case ConnectionState.done:
-            getidFavs();
             return Container(
               decoration:
                   const BoxDecoration(color: Color.fromARGB(255, 236, 196, 78)),
@@ -134,7 +119,9 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
                       child: TextField(
                         controller: TextEditingController(),
                         onSubmitted: (value) {
-                          searchForDrinks(value);
+                          setState(() {
+                            searchtoSearch = value;
+                          });
                         },
                         decoration: const InputDecoration(
                             hintText: 'Search for drinks...',
@@ -283,10 +270,11 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
                     ),
                     Expanded(
                       child: ListView.builder(
-                        itemCount: apiData.length,
+                        itemCount: snapshot.data?.length,
                         itemBuilder: (BuildContext context, int index) {
-                          bool itemFavSelect =
-                              idFavorites.contains(apiData[index].idDrink);
+                          bool itemFavSelect = idFavorites
+                              .contains(snapshot.data![index].idDrink);
+
                           return Card(
                             color: Colors.white,
                             elevation: 5.0,
@@ -297,40 +285,35 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
                             margin: const EdgeInsets.all(4.0),
                             child: ListTile(
                               leading: Image.network(
-                                apiData[index].strDrinkThumb,
+                                snapshot.data![index].strDrinkThumb,
                                 fit: BoxFit.cover,
                                 height: 150.0,
                               ),
-                              title: Text(apiData[index].strDrink),
-                              subtitle: Text(apiData[index].strCategory +
-                                  ' / ' +
-                                  apiData[index].strAlcoholic +
-                                  ' / ' +
-                                  apiData[index].strGlass),
+                              title: Text(snapshot.data![index].strDrink),
+                              subtitle: Text(
+                                  snapshot.data![index].strCategory! +
+                                      ' / ' +
+                                      snapshot.data![index].strAlcoholic! +
+                                      ' / ' +
+                                      snapshot.data![index].strGlass!),
                               trailing: IconButton(
                                 icon: itemFavSelect
                                     ? const Icon(Icons.favorite)
                                     : const Icon(Icons.favorite_border),
                                 onPressed: () async {
-                                  if (idFavorites
-                                      .contains(apiData[index].idDrink)) {
+                                  if (idFavorites.contains(
+                                      snapshot.data![index].idDrink)) {
                                     await _notesService.deleteDrinkFromFavs(
-                                        drinkId: apiData[index].idDrink);
-
-                                    // await showInfoFavsDialog(
-                                    //     context, 'Drink eliminated from Favs.');
+                                        drinkId: snapshot.data![index].idDrink);
                                   } else {
                                     await _notesService.addDrinktoFav(
                                         ownerUserId: userCurrent,
-                                        drinkToAdd: apiData[index]);
-
-                                    // await showInfoFavsDialog(
-                                    //     context, 'Drink added to Favs.');
+                                        drinkToAdd: snapshot.data![index]);
                                   }
                                   await getidFavs();
                                   setState(() {
-                                    itemFavSelect = idFavorites
-                                        .contains(apiData[index].idDrink);
+                                    itemFavSelect = idFavorites.contains(
+                                        snapshot.data![index].idDrink);
                                   });
                                 },
                                 color: Colors.red,
@@ -338,7 +321,7 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
                               onTap: () {
                                 context
                                     .read<ItemDetail>()
-                                    .setitemDetail(apiData[index]);
+                                    .setitemDetail(snapshot.data![index]);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -355,9 +338,10 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
                 ),
               ),
             );
-            break;
+
           default:
-            return const Scaffold(body: CircularProgressIndicator());
+            return const Scaffold(
+                body: Center(child: CircularProgressIndicator()));
         }
       },
     );

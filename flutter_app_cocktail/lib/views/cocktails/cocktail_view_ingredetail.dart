@@ -109,16 +109,10 @@ class _IngredientViewState extends State<IngredientView> {
                             await _notesService.deleteDrinkFromIngredientsFavs(
                                 idIngredient:
                                     snapshot.data?.idIngredient ?? '');
-
-                            await showInfoFavsDialog(
-                                context, 'Ingredient eliminated from Favs.');
                           } else {
                             await _notesService.addIngredienttoFav(
                                 ownerUserId: userCurrent,
                                 ingredientToAdd: snapshot.data!);
-
-                            await showInfoFavsDialog(
-                                context, 'Ingredient added to Favs.');
                           }
                           await getidFavs();
                           setState(() {

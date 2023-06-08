@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 const List<String> categorias = [
   'Ordinary Drink',
   'Cocktail',
