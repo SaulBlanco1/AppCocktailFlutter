@@ -98,177 +98,166 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: searchForDrinks(searchtoSearch),
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.active:
-          case ConnectionState.done:
-            return Container(
-              decoration:
-                  const BoxDecoration(color: Color.fromARGB(255, 236, 196, 78)),
-              child: Container(
-                margin: const EdgeInsets.only(top: 35.0),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                      ),
-                      child: TextField(
-                        controller: TextEditingController(),
-                        onSubmitted: (value) {
-                          setState(() {
-                            searchtoSearch = value;
-                          });
-                        },
-                        decoration: const InputDecoration(
-                            hintText: 'Search for drinks...',
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(30)),
+    return Container(
+      decoration: const BoxDecoration(color: Color.fromARGB(255, 236, 196, 78)),
+      child: Container(
+        margin: const EdgeInsets.only(top: 35.0),
+        child: Column(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+              ),
+              child: TextField(
+                controller: TextEditingController(),
+                onSubmitted: (value) {
+                  setState(() {
+                    searchtoSearch = value;
+                  });
+                },
+                decoration: const InputDecoration(
+                    hintText: 'Search for drinks...',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                    ),
+                    hintStyle: TextStyle(
+                      color: Color.fromARGB(255, 236, 196, 78),
+                    )),
+              ),
+            ),
+            Row(
+              children: [
+                Checkbox(
+                  value: _filtersActivated,
+                  activeColor: Colors.green,
+                  onChanged: (value) {
+                    setState(() {
+                      _filtersActivated = !_filtersActivated;
+                    });
+                  },
+                ),
+                const Text('Filters On/Off')
+              ],
+            ),
+            Visibility(
+              visible: _filtersActivated,
+              child: Card(
+                color: Colors.white,
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    side: const BorderSide(color: Colors.grey, width: 1)),
+                margin: const EdgeInsets.all(3.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              value: _categoryActivated,
+                              onChanged: (value) {
+                                setState(() {
+                                  _categoryActivated = !_categoryActivated;
+                                });
+                              },
                             ),
-                            hintStyle: TextStyle(
-                              color: Color.fromARGB(255, 236, 196, 78),
-                            )),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: _filtersActivated,
-                          activeColor: Colors.green,
-                          onChanged: (value) {
-                            setState(() {
-                              _filtersActivated = !_filtersActivated;
-                            });
-                          },
-                        ),
-                        const Text('Filters On/Off')
-                      ],
-                    ),
-                    Visibility(
-                      visible: _filtersActivated,
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 5.0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            side:
-                                const BorderSide(color: Colors.grey, width: 1)),
-                        margin: const EdgeInsets.all(3.0),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15.0),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30.0),
-                                child: Row(
-                                  children: [
-                                    Checkbox(
-                                      value: _categoryActivated,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _categoryActivated =
-                                              !_categoryActivated;
-                                        });
-                                      },
-                                    ),
-                                    DropdownButton<String>(
-                                      value: _categorySelected,
-                                      items: _filtersActivated
-                                          ? categorias.map((String categoria) {
-                                              return DropdownMenuItem<String>(
-                                                value: categoria,
-                                                child: Text(categoria,
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
-                                              );
-                                            }).toList()
-                                          : [],
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          _categorySelected = newValue!;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30.0),
-                                child: Row(
-                                  children: [
-                                    Checkbox(
-                                      value: _alcoholicActivated,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _alcoholicActivated =
-                                              !_alcoholicActivated;
-                                        });
-                                      },
-                                    ),
-                                    DropdownButton<String>(
-                                      value: _alcoholicSelected,
-                                      items: _filtersActivated
-                                          ? alcoholic.map((String alcoholic) {
-                                              return DropdownMenuItem<String>(
-                                                value: alcoholic,
-                                                child: Text(alcoholic),
-                                              );
-                                            }).toList()
-                                          : [],
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          _alcoholicSelected = newValue!;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30.0),
-                                child: Row(
-                                  children: [
-                                    Checkbox(
-                                      value: _typeGlassActivated,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _typeGlassActivated =
-                                              !_typeGlassActivated;
-                                        });
-                                      },
-                                    ),
-                                    DropdownButton<String>(
-                                      value: _typeGlassSelected,
-                                      items: _filtersActivated
-                                          ? glassType.map((String glassType) {
-                                              return DropdownMenuItem<String>(
-                                                value: glassType,
-                                                child: Text(glassType),
-                                              );
-                                            }).toList()
-                                          : [],
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          _typeGlassSelected = newValue!;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                            DropdownButton<String>(
+                              value: _categorySelected,
+                              items: _filtersActivated
+                                  ? categorias.map((String categoria) {
+                                      return DropdownMenuItem<String>(
+                                        value: categoria,
+                                        child: Text(categoria,
+                                            overflow: TextOverflow.ellipsis),
+                                      );
+                                    }).toList()
+                                  : [],
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  _categorySelected = newValue!;
+                                });
+                              },
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    Expanded(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              value: _alcoholicActivated,
+                              onChanged: (value) {
+                                setState(() {
+                                  _alcoholicActivated = !_alcoholicActivated;
+                                });
+                              },
+                            ),
+                            DropdownButton<String>(
+                              value: _alcoholicSelected,
+                              items: _filtersActivated
+                                  ? alcoholic.map((String alcoholic) {
+                                      return DropdownMenuItem<String>(
+                                        value: alcoholic,
+                                        child: Text(alcoholic),
+                                      );
+                                    }).toList()
+                                  : [],
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  _alcoholicSelected = newValue!;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              value: _typeGlassActivated,
+                              onChanged: (value) {
+                                setState(() {
+                                  _typeGlassActivated = !_typeGlassActivated;
+                                });
+                              },
+                            ),
+                            DropdownButton<String>(
+                              value: _typeGlassSelected,
+                              items: _filtersActivated
+                                  ? glassType.map((String glassType) {
+                                      return DropdownMenuItem<String>(
+                                        value: glassType,
+                                        child: Text(glassType),
+                                      );
+                                    }).toList()
+                                  : [],
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  _typeGlassSelected = newValue!;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            FutureBuilder(
+              future: searchForDrinks(searchtoSearch),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.done:
+                    return Expanded(
                       child: ListView.builder(
                         itemCount: snapshot.data?.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -333,17 +322,15 @@ class _HomeCocktailViewState extends State<HomeCocktailView> {
                           );
                         },
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-
-          default:
-            return const Scaffold(
-                body: Center(child: CircularProgressIndicator()));
-        }
-      },
+                    );
+                  default:
+                    return const Center(child: CircularProgressIndicator());
+                }
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 }
