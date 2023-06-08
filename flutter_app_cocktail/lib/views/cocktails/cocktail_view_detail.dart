@@ -117,6 +117,7 @@ class _ItemDetailShowState extends State<ItemDetailShow> {
                                               listen: false)
                                           .getDrink
                                           .idDrink);
+                                  await getidFavs();
                                 } else {
                                   await _notesService.addDrinktoFav(
                                       ownerUserId: userCurrent,
@@ -124,8 +125,9 @@ class _ItemDetailShowState extends State<ItemDetailShow> {
                                               context,
                                               listen: false)
                                           .getDrink);
+                                  await getidFavs();
                                 }
-                                await getidFavs();
+
                                 setState(() {
                                   itemIsFav = idFavorites.contains(
                                       Provider.of<ItemDetail>(context,

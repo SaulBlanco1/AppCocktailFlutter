@@ -12,7 +12,7 @@ class FirebaseCloudStorage {
   Future<void> deleteDrinkFromFavs({required String drinkId}) async {
     Query queryToDelete = drinks.where('idDrink', isEqualTo: drinkId);
 
-    queryToDelete.get().then((querySnapshot) {
+    await queryToDelete.get().then((querySnapshot) {
       for (var doc in querySnapshot.docs) {
         doc.reference.delete();
       }
@@ -24,7 +24,7 @@ class FirebaseCloudStorage {
     Query queryToDelete =
         ingredients.where('idIngredient', isEqualTo: idIngredient);
 
-    queryToDelete.get().then((querySnapshot) {
+    await queryToDelete.get().then((querySnapshot) {
       for (var doc in querySnapshot.docs) {
         doc.reference.delete();
       }
