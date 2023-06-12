@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_app_cocktail/dataclasses/cocktail_list_drinks.dart';
 import 'package:flutter_app_cocktail/services/cloud/cloud_ingredient.dart';
 import 'package:flutter_app_cocktail/services/cloud/cloud_note.dart';
 import 'package:flutter_app_cocktail/services/cloud/cloud_storage_constants.dart';
-import 'package:flutter_app_cocktail/services/cloud/cloud_storage_exceptions.dart';
 
 class FirebaseCloudStorage {
   final drinks = FirebaseFirestore.instance.collection('favDrinks');

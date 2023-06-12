@@ -9,11 +9,11 @@ import 'package:flutter_app_cocktail/services/auth/bloc/auth_state.dart';
 import 'package:flutter_app_cocktail/services/auth/firebase_auth_provider.dart';
 import 'package:flutter_app_cocktail/views/cocktails/cocktail_view_main.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_app_cocktail/views/forgot_password_view.dart';
-import 'package:flutter_app_cocktail/views/login_view.dart';
+import 'package:flutter_app_cocktail/views/auth/forgot_password_view.dart';
+import 'package:flutter_app_cocktail/views/auth/login_view.dart';
 
-import 'package:flutter_app_cocktail/views/register_view.dart';
-import 'package:flutter_app_cocktail/views/verify_email_view.dart';
+import 'package:flutter_app_cocktail/views/auth/register_view.dart';
+import 'package:flutter_app_cocktail/views/auth/verify_email_view.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/favlist_provider.dart';
